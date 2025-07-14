@@ -4,7 +4,6 @@ dotenv.config();
 
 
 const HUBSPOT_API_TOKEN = process.env.HUBSPOT_API_TOKEN;
-console.log('🔑 HubSpot API Token:', HUBSPOT_API_TOKEN);
 
 export async function getContactIdByPhone(phone) {
     const url = 'https://api.hubapi.com/crm/v3/objects/contacts/search';
