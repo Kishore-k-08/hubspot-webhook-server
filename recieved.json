@@ -1,0 +1,26 @@
+{
+  "id": "68749b13ca6426ac1322e270",
+  "conversationId": "68720e16cfe66b56586e6be9",
+  "accountId": "663a2070f88e71296fc570dd",
+  "channelId": "663a217839ec52d317a20a73",
+  "channelType": "whatsapp",
+  "localMessageId": "c46c0756-f352-49e6-b5c0-b5cd0b741a2f",
+  "contactId": "6871f9f1653575b74b6a414d",
+  "sender": "6871f9f1653575b74b6a414d",
+  "whatsapp": {
+    "id": "wamid.HBgMOTE3MzU4Mjk3NDQ5FQIAEhggNkEzRjQ4QjQ4MTU1NzZCQkM5NkJCOEIxNjIzRDFGNDIA",
+    "from": "917358297449",
+    "time": "2025-07-14T05:52:18.000Z",
+    "status": "received",
+    "statusTime": "2025-07-14T05:52:18.000Z",
+    "type": "text",
+    "text": {
+      "body": "Hi"
+    }
+  },
+  "contact": {
+    "id": "6871f9f1653575b74b6a414d",
+    "name": "Kishore"
+  },
+  "channelNumber": "917825876207"
+}
