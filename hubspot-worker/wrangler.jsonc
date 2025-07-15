@@ -1,0 +1,22 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "hubspot-worker",
+	"main": "src/index.js",
+	"node_compat": true,
+	"compatibility_date": "2025-07-15",
+	"observability": {
+		"enabled": true
+	}
+
+	// OPTIONAL - Uncomment and use if needed later
+	// "placement": { "mode": "smart" },
+
+	// ENV VARIABLES (Optional example)
+	// "vars": {
+	//   "HUBSPOT_CLIENT_ID": "xxx",
+	//   "HUBSPOT_CLIENT_SECRET": "xxx"
+	// }
+
+	// If you use .env and secrets, run:
+	// npx wrangler secret put HUBSPOT_CLIENT_ID
+}
