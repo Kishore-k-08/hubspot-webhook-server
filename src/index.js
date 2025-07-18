@@ -1,8 +1,7 @@
 import { getContactIdByPhone, updateReplyNeeded } from './hubspot.js';
-import { logRequest } from './utils.js';
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env) {
     if (request.method !== 'POST') {
       return new Response('Method Not Allowed', { status: 405 });
     }
@@ -13,20 +12,15 @@ export default {
     }
 
     try {
-      const startTime = Date.now();
       const payload = await request.json();
-
-      logRequest(payload, startTime);
-
-      const whatsapp = payload?.whatsapp;
-      const status = whatsapp?.status;
-      const type = whatsapp?.type;
-      const phone = whatsapp?.from || whatsapp?.to;
+      const { status, type, from, to } = payload?.whatsapp || {};
+      const phone = from || to;
 
       if (!status || !type || !phone) {
         return new Response('Missing required fields.', { status: 400 });
       }
 
+      // Determine if 'reply_needed' should be updated
       let replyNeeded = null;
       if (status === 'received' && type === 'text') {
         replyNeeded = 'yes';
@@ -45,7 +39,7 @@ export default {
 
       await updateReplyNeeded(contactId, replyNeeded, env.HUBSPOT_API_TOKEN);
       return new Response('Contact updated.', { status: 200 });
-    } catch (err) {
+    } catch {
       return new Response('Internal Server Error', { status: 500 });
     }
   },

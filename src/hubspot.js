@@ -1,22 +1,18 @@
-const HUBSPOT_API_BASE_URL = 'https://api.hubapi.com/crm/v3/objects/contacts';
+const BASE_URL = 'https://api.hubapi.com/crm/v3/objects/contacts';
 
 export async function getContactIdByPhone(phone, token) {
-  const url = `${HUBSPOT_API_BASE_URL}/search`;
   const formattedPhone = phone.startsWith('+') ? phone : `+${phone}`;
+  const url = `${BASE_URL}/search`;
 
   const payload = {
-    filterGroups: [
-      {
-        filters: [
-          {
-            propertyName: 'phone',
-            operator: 'EQ',
-            value: formattedPhone,
-          },
-        ],
-      },
-    ],
-    properties: ['firstname', 'lastname', 'email', 'phone'],
+    filterGroups: [{
+      filters: [{
+        propertyName: 'phone',
+        operator: 'EQ',
+        value: formattedPhone,
+      }],
+    }],
+    properties: ['phone'],
     limit: 1,
   };
 
@@ -29,25 +25,21 @@ export async function getContactIdByPhone(phone, token) {
     body: JSON.stringify(payload),
   });
 
-  if (!res.ok) {
-    const error = await res.text();
-    console.error('❌ Error fetching contact ID:', error);
-    return null;
-  }
+  if (!res.ok) return null;
 
   const data = await res.json();
   return data?.results?.[0]?.id || null;
 }
 
 export async function updateReplyNeeded(contactId, value, token) {
-  const url = `${HUBSPOT_API_BASE_URL}/${contactId}`;
+  const url = `${BASE_URL}/${contactId}`;
   const payload = {
     properties: {
-      [env.HUBSPOT_PROPERTY_NAME]: value,
+      reply_needed: value,
     },
   };
 
-  const res = await fetch(url, {
+  await fetch(url, {
     method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -55,11 +47,4 @@ export async function updateReplyNeeded(contactId, value, token) {
     },
     body: JSON.stringify(payload),
   });
-
-  if (!res.ok) {
-    const error = await res.text();
-    console.error('❌ Error updating contact:', error);
-  } else {
-    console.log(`✅ Contact updated → reply_needed = ${value}`);
-  }
 }
