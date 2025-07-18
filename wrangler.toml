@@ -1,0 +1,4 @@
+name = "hubspot-gallabox-worker"
+main = "src/index.js"
+compatibility_date = "2024-07-16"
+

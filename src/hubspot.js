@@ -43,7 +43,7 @@ export async function updateReplyNeeded(contactId, value, token) {
   const url = `${HUBSPOT_API_BASE_URL}/${contactId}`;
   const payload = {
     properties: {
-      reply_needed: value,
+      [env.HUBSPOT_PROPERTY_NAME]: value,
     },
   };
 
