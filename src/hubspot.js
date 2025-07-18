@@ -1,26 +1,22 @@
-import { logRequest } from './utils.js';
-
-const HUBSPOT_API_BASE_URL = 'https://api.hubapi.com/crm/v3/objects/contacts';
+const BASE_URL = 'https://api.hubapi.com/crm/v3/objects/contacts';
 
 export async function getContactIdByPhone(phone, token) {
-  const url = `${HUBSPOT_API_BASE_URL}/search`;
   const formattedPhone = phone.startsWith('+') ? phone : `+${phone}`;
+  const url = `${BASE_URL}/search`;
 
   const payload = {
-    filterGroups: [
-      {
-        filters: [
-          {
-            propertyName: 'phone',
-            operator: 'EQ',
-            value: formattedPhone,
-          },
-        ],
-      },
-    ],
-    properties: ['firstname', 'lastname', 'email', 'phone'],
+    filterGroups: [{
+      filters: [{
+        propertyName: 'phone',
+        operator: 'EQ',
+        value: formattedPhone,
+      }],
+    }],
+    properties: ['phone'],
     limit: 1,
   };
+
+  console.log(`Searching contact with phone: ${formattedPhone}`);
 
   const res = await fetch(url, {
     method: 'POST',
@@ -32,22 +28,31 @@ export async function getContactIdByPhone(phone, token) {
   });
 
   if (!res.ok) {
-    const error = await res.text();
-    console.error('❌ Error fetching contact ID:', error);
+    console.error(`Failed to fetch contact for phone: ${formattedPhone} (Status: ${res.status})`);
     return null;
   }
 
   const data = await res.json();
-  return data?.results?.[0]?.id || null;
+  const contactId = data?.results?.[0]?.id;
+
+  if (contactId) {
+    console.log(`Contact found: ${contactId}`);
+  } else {
+    console.log(`No contact found for phone: ${formattedPhone}`);
+  }
+
+  return contactId || null;
 }
 
-export async function updateReplyNeeded(contactId, value, propertyName, token) {
-  const url = `${HUBSPOT_API_BASE_URL}/${contactId}`;
+export async function updateReplyNeeded(contactId, value, token, propertyName) {
+  const url = `${BASE_URL}/${contactId}`;
   const payload = {
     properties: {
       [propertyName]: value,
     },
   };
+
+  console.log(`Updating contact ${contactId}: ${propertyName} = ${value}`);
 
   const res = await fetch(url, {
     method: 'PATCH',
@@ -59,10 +64,8 @@ export async function updateReplyNeeded(contactId, value, propertyName, token) {
   });
 
   if (!res.ok) {
-    const error = await res.text();
-    console.error('❌ Error updating contact:', error);
-  }
-  else {
-    console.log(`✅ Contact updated → reply_needed = ${value}`);
+    console.error(`Failed to update contact ${contactId} (Status: ${res.status})`);
+  } else {
+    console.log(`Contact ${contactId} updated successfully`);
   }
 }

@@ -1,5 +1,5 @@
-export function logRequest(body, startTime) {
+export function logRequest(body) {
   const timestamp = new Date().toISOString();
-  console.log(`\n📥 [${timestamp}] POST /webhook`);
-  console.log('🔍 Request Body:', JSON.stringify(body, null, 2));
+  console.log(`[${timestamp}] Incoming Webhook`);
+  console.log('Payload:', JSON.stringify(body));
 }
